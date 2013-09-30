@@ -8,4 +8,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".WeatherBeacon" >
 
+    <ImageView
+        android:id="@+id/weatherbeacon"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:adjustViewBounds="true"
+        android:src="@drawable/weatherbeacon_green" />
+
 </RelativeLayout>

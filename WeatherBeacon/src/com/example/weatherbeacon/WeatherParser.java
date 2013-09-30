@@ -27,8 +27,8 @@ public class WeatherParser {
 		return Integer.valueOf(tomorrowForecast);
 	}
 
-	public String getConditions() {
-		return conditions;
+	public int getConditions() {
+		return Integer.valueOf(conditions);
 	}
 	
 	private void parse() {
@@ -39,10 +39,10 @@ public class WeatherParser {
 		try {
 			while ((line = br.readLine()) != null) {
 				if (line.contains("yweather:forecast day=\"" + dayOfWeek(day))) {
-					todayForecast = line.substring(line.indexOf("high=\"") + 6, line.indexOf("high=\"") + 8);
+					todayForecast = parseLine(line, "high");
 					line = br.readLine();
-					tomorrowForecast = line.substring(line.indexOf("high=\"") + 6, line.indexOf("high=\"") + 8);
-					// TODO conditions = 
+					tomorrowForecast = parseLine(line, "high");
+					conditions = parseLine(line, "code");
 				}
 			}
 		} catch (IOException e) {
@@ -77,5 +77,23 @@ public class WeatherParser {
 			break;
 		}
 		return day;
+	}
+	
+	private String parseLine(String line, String key) {
+		String str = line.substring(line.indexOf(key +"=\"") + 6);
+		String result = findValue(str);
+		
+		return result;
+	}
+	
+	private String findValue(String txt) {
+		StringBuilder sb = new StringBuilder();
+		
+		int i = 0;
+		while (txt.charAt(i) != '\"') {
+			i++;
+		}
+		
+		return txt.substring(0, i);
 	}
 }

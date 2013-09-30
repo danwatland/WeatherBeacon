@@ -11,13 +11,15 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 public class WeatherBeacon extends Activity {
 
@@ -47,16 +49,26 @@ public class WeatherBeacon extends Activity {
 
 		WeatherParser wp = new WeatherParser(is);
 		View view = this.getWindow().getDecorView();
+		view.setBackgroundColor(Color.BLACK);
+		ImageView iv = (ImageView) findViewById(R.id.weatherbeacon);
+		int beacon;
 		
 		if (wp.getTomorrowForecast() - wp.getTodayForecast() > 4) {
-			view.setBackgroundResource(R.drawable.weatherbeacon_red);
+			beacon = R.drawable.weatherbeacon_red;
 		} else if (wp.getTomorrowForecast() - wp.getTodayForecast() < -4) {
-			view.setBackgroundResource(R.drawable.weatherbeacon_white);
+			beacon = R.drawable.weatherbeacon_white;
 		} else {
-			view.setBackgroundResource(R.drawable.weatherbeacon_green);
+			beacon = R.drawable.weatherbeacon_green;
 		}
 		
+		iv.setImageResource(beacon);
 		
+		int conditions = wp.getConditions();
+		
+		if ((conditions <= 18 || conditions >= 35) && conditions != 36 && conditions != 44) {
+			Animation fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.tween);
+			iv.startAnimation(fadeInAnimation);
+		}
 	}
 	
 
