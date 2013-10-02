@@ -9,19 +9,27 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 
-public class WeatherBeacon extends Activity {
+public class WeatherBeacon extends FragmentActivity {
 
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	@Override
@@ -69,6 +77,9 @@ public class WeatherBeacon extends Activity {
 			Animation fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.tween);
 			iv.startAnimation(fadeInAnimation);
 		}
+		
+		registerForContextMenu(iv);
+		
 	}
 	
 
@@ -76,6 +87,34 @@ public class WeatherBeacon extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		// TODO Auto-generated method stub
+		super.onCreateContextMenu(menu, v, menuInfo);
+		menu.setHeaderTitle("Options");
+		menu.add("Additional Info");
+		menu.add("Weather Beacon Key");
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+		
+		new AlertDialog.Builder(this)
+	    .setTitle("WEATHER BEACON KEY")
+	    .setMessage("Red: Warm weather ahead.\nWhite: Cold weather in sight.\nGreen: No change forseen.\nFlashing: Precipitation.")
+	    .setNeutralButton("Great.", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // continue with delete
+	        }
+	     })
+
+	     .show();
+		
 		return true;
 	}
 
