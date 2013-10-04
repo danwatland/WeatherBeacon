@@ -12,6 +12,7 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -96,25 +97,36 @@ public class WeatherBeacon extends FragmentActivity {
 		// TODO Auto-generated method stub
 		super.onCreateContextMenu(menu, v, menuInfo);
 		menu.setHeaderTitle("Options");
-		menu.add("Additional Info");
-		menu.add("Weather Beacon Key");
+		menu.add(Menu.NONE, 1, 1, "Weather Beacon Key");
+		menu.add(Menu.NONE, 2, 2, "Beacon Map");
 	}
 	
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
 		
-		new AlertDialog.Builder(this)
-	    .setTitle("WEATHER BEACON KEY")
-	    .setMessage("Red: Warm weather ahead.\nWhite: Cold weather in sight.\nGreen: No change forseen.\nFlashing: Precipitation.")
-	    .setNeutralButton("Great.", new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int which) { 
-	            // continue with delete
-	        }
-	     })
+		switch (item.getItemId()) {
+		case 1:
+			new AlertDialog.Builder(this)
+		    .setTitle("WEATHER BEACON KEY")
+		    .setMessage("Red: Warm weather ahead.\nWhite: Cold weather in sight.\nGreen: No change forseen.\nFlashing: Precipitation.")
+		    .setNeutralButton("Great.", new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		            // continue with delete
+		        }
+		     })
 
-	     .show();
+		     .show();
+			break;
+		case 2:
+			Intent intent = new Intent(this, WeatherMap.class);
+			startActivity(intent);
+		default:
+			break;
+		}
 		
+		
+		Log.d("log_tag", "item.getItemId() == " + item.getItemId());
 		return true;
 	}
 
