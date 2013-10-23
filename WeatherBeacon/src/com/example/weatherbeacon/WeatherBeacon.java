@@ -25,7 +25,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 
 /**
@@ -124,8 +123,6 @@ public class WeatherBeacon extends FragmentActivity {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
-				.getMenuInfo();
 
 		// TODO Change this to switch on the titles of menu items instead of Item IDs.
 		switch (item.getItemId()) {

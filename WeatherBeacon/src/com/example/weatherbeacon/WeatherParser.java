@@ -142,8 +142,6 @@ public class WeatherParser {
 	 * @return Value between the first set of quotes.
 	 */
 	private String findValue(String txt) {
-		StringBuilder sb = new StringBuilder();
-
 		int i = 0;
 		while (txt.charAt(i) != '\"') {
 			i++;

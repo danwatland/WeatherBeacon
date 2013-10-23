@@ -13,21 +13,31 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+/**
+ * Activity which shows where the Weather Beacon is physically located using the
+ * Google Maps API.
+ * 
+ * @author Dan
+ * 
+ */
 public class WeatherMap extends FragmentActivity implements
 		GooglePlayServicesClient.ConnectionCallbacks,
 		GooglePlayServicesClient.OnConnectionFailedListener {
+
+	// Coordinates for the actual Des Moines Weather Beacon.
 	static final LatLng DES_MOINES_WEATHER_BEACON = new LatLng(41.592706,
 			-93.630012);
 
 	private GoogleMap map;
 	private LocationClient locationClient;
-	
+
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 
+		// Load map and center it on the Des Moines Weather Beacon.
 		locationClient = new LocationClient(this, this, this);
 		map = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.map)).getMap();
@@ -39,41 +49,41 @@ public class WeatherMap extends FragmentActivity implements
 	}
 
 	/*
-     * Called when the Activity becomes visible.
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // Connect the client.
-        locationClient.connect();
-    }
+	 * Called when the Activity becomes visible.
+	 */
+	@Override
+	protected void onStart() {
+		super.onStart();
+		// Connect the client.
+		locationClient.connect();
+	}
 
-    /*
-     * Called when the Activity is no longer visible.
-     */
-    @Override
-    protected void onStop() {
-        // Disconnecting the client invalidates it.
-        locationClient.disconnect();
-        super.onStop();
-    }
-    
+	/*
+	 * Called when the Activity is no longer visible.
+	 */
+	@Override
+	protected void onStop() {
+		// Disconnecting the client invalidates it.
+		locationClient.disconnect();
+		super.onStop();
+	}
+
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onDisconnected() {
 		// TODO Auto-generated method stub
-
 	}
+
+	
 
 }
