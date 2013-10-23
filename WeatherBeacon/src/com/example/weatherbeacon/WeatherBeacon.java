@@ -1,21 +1,13 @@
 package com.example.weatherbeacon;
 
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -26,6 +18,8 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+
+import com.connection.WebConnection;
 
 /**
  * Main activity for Weather Beacon program. Shows state of weather beacon
@@ -41,30 +35,24 @@ public class WeatherBeacon extends FragmentActivity {
 	private String[] menuOptions = new String[] { "Weather Beacon Key",
 			"Beacon Map" };
 
-	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		// TODO Change the following code to separate class that extends Asyncrhonous task.
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-				.permitAll().build();
-		StrictMode.setThreadPolicy(policy);
-
+		// Retrieve weather data from Yahoo.
+		WebConnection wc = new WebConnection();
+		wc.execute("http://weather.yahooapis.com/forecastrss?w=2391446");
 		InputStream is = null;
 
-		HttpClient client = new DefaultHttpClient();
-		HttpGet httpget = new HttpGet(
-				"http://weather.yahooapis.com/forecastrss?w=2391446");
-
 		try {
-			HttpResponse response = client.execute(httpget);
-			HttpEntity entity = response.getEntity();
-			is = entity.getContent();
+			// Have to account for a possible delay. This line of code
+			// retrieves
+			// the result as long as the app is able to contact the Yahoo!
+			// Weather service within the specified time.
+			is = wc.get(3000, TimeUnit.MILLISECONDS);
 		} catch (Exception e) {
-			// Shows any errors in LogCat.
-			Log.e("log_tag", "Error in http connection " + e.toString());
+			Log.e("log_tag", e.getMessage());
 		}
 
 		// Parse the XML data retrieved from the Yahoo! Weather API.
@@ -124,7 +112,8 @@ public class WeatherBeacon extends FragmentActivity {
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 
-		// TODO Change this to switch on the titles of menu items instead of Item IDs.
+		// TODO Change this to switch on the titles of menu items instead of
+		// Item IDs.
 		switch (item.getItemId()) {
 		case 0:
 			new AlertDialog.Builder(this)
